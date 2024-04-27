@@ -4,6 +4,8 @@ import com.example.demo.model.Books;
 import com.example.demo.service.BooksService;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class BooksController {
 
-    private final BooksService booksService;
-
-    public BooksController(BooksService booksService) {
-        this.booksService = booksService;
-    }
+    @Autowired
+    private BooksService booksService;
 
     @GetMapping("/getBooks")
     public ResponseEntity<List<Books>> getBooks() throws Exception {
@@ -42,6 +41,33 @@ public class BooksController {
         try {
             Books newBook = booksService.saveBooks(books);
             return ResponseEntity.ok(newBook);
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+
+    }
+
+    @DeleteMapping("/removeBook/{id}")
+    public ResponseEntity<String> removeBook(@PathVariable int id){
+        try{
+            booksService.deleteBook(id);
+            System.out.println("Successfully deleted!");
+            return new ResponseEntity<String>("Deleted successfully with id: "+id, HttpStatus.OK );
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+    }
+
+    @PutMapping("/updateBook/{id}")
+    public ResponseEntity<Books> updateBook(@PathVariable int id,
+                                            @RequestBody Books bookChanges){
+
+        try{
+            Books updated = booksService.updateBookById(id, bookChanges);
+            System.out.println("Book updated successfully!");
+            return new ResponseEntity<Books>(updated,HttpStatus.OK);
         }
         catch (Exception e){
             throw new RuntimeException();

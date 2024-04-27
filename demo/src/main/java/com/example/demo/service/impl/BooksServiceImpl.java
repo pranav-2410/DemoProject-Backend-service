@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BooksServiceImpl implements BooksService {
@@ -30,11 +31,25 @@ public class BooksServiceImpl implements BooksService {
     public Books
     saveBooks(Books books) throws Exception {
 
-        try {
-            return booksRepository.save(books);
+        return booksRepository.save(books);
+    }
+
+    @Override
+    public void deleteBook(int id) {
+
+        booksRepository.deleteById(id);
+    }
+
+    @Override
+    public Books updateBookById(int id, Books bookChanges) {
+
+        Books saved=null;
+        if (booksRepository.findById(id).isPresent()) {
+            Books presentBook = booksRepository.findById(id).get();
+            presentBook.setBookName(bookChanges.getBookName());
+            presentBook.setPrice(bookChanges.getPrice());
+            saved = booksRepository.save(presentBook);
         }
-        catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+        return saved;
     }
 }

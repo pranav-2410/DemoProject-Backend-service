@@ -9,4 +9,8 @@ public interface BooksService {
     List<Books> getBooks() throws Exception;
 
     Books saveBooks(Books books) throws Exception;
+
+    void deleteBook(int id);
+
+    Books updateBookById(int id, Books bookChanges);
 }
