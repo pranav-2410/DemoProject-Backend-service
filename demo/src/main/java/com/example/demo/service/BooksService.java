@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BooksService {
 
-    List<Books> getBooks();
+    List<Books> getBooks() throws Exception;
 
-    Books saveBooks(Books books);
+    Books saveBooks(Books books) throws Exception;
 }

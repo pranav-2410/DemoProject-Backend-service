@@ -21,20 +21,31 @@ public class BooksController {
     }
 
     @GetMapping("/getBooks")
-    public ResponseEntity<List<Books>> getBooks(){
-        List<Books> listOfBooks;
+    public ResponseEntity<List<Books>> getBooks() throws Exception {
+        List<Books> listOfBooks=null;
+        try{
         listOfBooks = booksService.getBooks();
         System.out.println("The list of books available are:  ");
         for(Books book:listOfBooks){
             System.out.println(book.getBookId()+" "+ book.getPrice()+" "+ book.getBookName());
+        }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
         return ResponseEntity.ok(listOfBooks);
     }
 
     @PostMapping("/saveBook")
     public ResponseEntity<Books> saveBooks(@RequestBody Books books){
-        Books newBook = booksService.saveBooks(books);
-//        log.info("New book added");
-        return ResponseEntity.ok(newBook);
+
+        try {
+            Books newBook = booksService.saveBooks(books);
+            return ResponseEntity.ok(newBook);
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+
     }
 }

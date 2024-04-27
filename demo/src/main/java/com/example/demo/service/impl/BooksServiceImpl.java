@@ -8,26 +8,33 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class BooksServiceImpl implements BooksService {
-
     @Autowired
     private BooksRepository booksRepository;
 
     @Override
-    public List<Books> getBooks() {
-
-        return (List<Books>) booksRepository.findAll();
+    public List<Books> getBooks() throws Exception {
+        try {
+            return (List<Books>) booksRepository.findAll();
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
     public Books
-    saveBooks(Books books) {
+    saveBooks(Books books) throws Exception {
 
-        return booksRepository.save(books);
+        try {
+            return booksRepository.save(books);
+        }
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 }
